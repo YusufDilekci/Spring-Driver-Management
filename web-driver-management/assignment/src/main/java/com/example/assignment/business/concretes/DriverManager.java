@@ -59,13 +59,6 @@ public class DriverManager implements DriverService{
         return deletedDriverResponse;
     }
 
-    @Override
-    public GetDriverByNameResponse getByName(GetDriverByNameRequest request) {
-        Driver driver = driverRepository.findByName(request.getName());
-        GetDriverByNameResponse driverResponse = this.modelMapperService.forResponse()
-                .map(driver, GetDriverByNameResponse.class);
-        return driverResponse;
-    }
 
     @Override
     public GetDriverByIdResponse getById(GetDriverByIdRequest request) {

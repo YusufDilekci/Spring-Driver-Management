@@ -31,10 +31,6 @@ public class VehicleManager implements VehicleService {
         return vehiclesResponse;
     }
 
-    @Override
-    public GetVehicleByBrandResponse getByBrand(GetVehicleByBrandRequest request) {
-        return null;
-    }
 
     @Override
     public GetVehicleByIdResponse getById(GetVehicleByIdRequest request) {
