@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::body})}">
 <head>
     <meta charset="UTF-8">
     <title>Vehicles</title>
@@ -41,8 +41,7 @@
                     data-vehicle-model=${vehicle.model}">Delete</button>
             <button class="btn btn-primary assign-vehicle"
                     th:attr="data-vehicle-id=${vehicle.id},
-                    data-vehicle-brand=${vehicle.brand},
-                    data-vehicle-model=${vehicle.model}">Assign</button>
+                    data-vehicle-brand=${vehicle.brand}">Assign</button>
         </td>
     </tr>
     </tbody>
@@ -75,17 +74,14 @@
                     url: '/vehicles/add',
                     method: 'POST',
                     contentType: 'application/json',
+                    dataType: 'json',
                     data: JSON.stringify({ brand, model, color, type }),
-                    dataType: 'json'
+                    success: function(response) {
+                        location.reload();
+                    },
                 });
             },
-        }).then(result => {
-            if (result.isConfirmed) {
-                location.reload();
-            } else {
-                // Handle cancel
-            }
-        });
+        })
     });
 
     $('.delete-vehicle').click(function() {
@@ -152,9 +148,69 @@
         });
     });
 
+    var driverList = /*[[ ${drivers} ]]*/ [];
     $('.assign-vehicle').click(function() {
-        // Implement assigning a vehicle to a driver
-        // You can use a similar approach as in the driver assignment section
+
+        var vehicleBrand = $(this).data('vehicle-brand');
+        var vehicleId = $(this).data('vehicle-id');
+
+        var options = '';
+
+        for (var i = 0; i < driverList.length; i++) {
+            options += '<option value="' + driverList[i].id + '">' + driverList[i].name + '</option>';
+        }
+        Swal.fire({
+            title: 'Assign vehicle',
+            html:
+                '<input id="name" class="form-control" type="text" value="' + vehicleBrand + '" disabled><br>' +
+                '<div class="input-group mb-3">\n' +
+                '  <label class="input-group-text" for="driver">Drivers</label>\n' +
+                '  <select class="form-select" id="driver">' +
+                '    <option selected>Choose...</option>' + options +
+                '  </select>\n' +
+                '</div>'+
+                '<div class="input-group mb-3">\n' +
+                '  <label class="input-group-text" for="inputGroupSelect01">Date</label>\n' +
+                '  <input id="date" type="date" class="form-control"/>' +
+                '  </select>\n' +
+                '</div>' +
+                '<div class="input-group mb-3">\n' +
+                '  <span class="input-group-text" id="inputGroup-sizing-default">Days</span>\n' +
+                '  <input id="day" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">\n' +
+                '</div>',
+            showCancelButton: true,
+            confirmButtonText: 'Save',
+            cancelButtonText: 'Close',
+            showLoaderOnConfirm: true,
+            preConfirm: function() {
+                const driverId = $('#driver').val()
+                const assignDate = $('#date').val()
+                const days = parseInt($('#day').val());
+
+
+                const assignedDateObj = new Date(assignDate);
+                assignedDateObj.setDate(assignedDateObj.getDate() + days);
+                const returnDate = assignedDateObj.toISOString().split('T')[0];
+
+                const data = {
+                    driverId: driverId,
+                    vehicleId: vehicleId,
+                    assignedDate: assignDate,
+                    returnDate: returnDate
+                };
+                $.ajax({
+                    url: '/assignments/add',
+                    method: 'POST',
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function(response) {
+                        window.location.href = '/assignments/';
+                    },
+                });
+            },
+
+        });
     });
 
 </script>

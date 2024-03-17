@@ -17,9 +17,13 @@ public class Assignment {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
 
-    private int driverId;
+    @ManyToOne
+    @JoinColumn(name = "driver_id")
+    private Driver driver;
 
-    private int vehicleId;
+    @ManyToOne
+    @JoinColumn(name = "vehicle_id")
+    private Vehicle vehicle;
 
     private Date assignedDate;
 

@@ -14,5 +14,5 @@ public interface AssignmentService {
     CreatedAssignmentResponse add(CreateAssignmentRequest request);
     UpdatedAssignmentResponse update(UpdateAssignmentRequest request);
     DeletedAssignmentResponse delete(DeleteAssignmentRequest request);
-    List<GetAllAssignmentsWithDriverNameAndVehicleBrandResponse> getAllWithDriverAndVehicle();
+    List<GetAllAssignmentsWithDriverNameAndVehicleBrandResponse> getAll();
 }

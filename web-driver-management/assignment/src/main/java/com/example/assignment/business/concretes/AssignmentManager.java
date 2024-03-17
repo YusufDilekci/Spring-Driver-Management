@@ -19,8 +19,7 @@ import java.util.List;
 public class AssignmentManager implements AssignmentService {
     private AssignmentRepository assignmentRepository;
     private ModelMapperService modelMapperService;
-    private DriverService driverService;
-    private VehicleService vehicleService;
+
     @Override
     public CreatedAssignmentResponse add(CreateAssignmentRequest request) {
         Assignment assignment = this.modelMapperService.forRequest()
@@ -53,7 +52,7 @@ public class AssignmentManager implements AssignmentService {
     }
 
     @Override
-    public List<GetAllAssignmentsWithDriverNameAndVehicleBrandResponse> getAllWithDriverAndVehicle() {
+    public List<GetAllAssignmentsWithDriverNameAndVehicleBrandResponse> getAll() {
 
         List<Assignment> assignments = assignmentRepository.findAll();
 
@@ -61,23 +60,13 @@ public class AssignmentManager implements AssignmentService {
                 new ArrayList<>();
 
         for(var assignment : assignments){
-            GetDriverByIdRequest driverRequest = GetDriverByIdRequest.builder()
-                    .id(assignment.getDriverId())
-                    .build();
-            GetDriverByIdResponse driverResponse = driverService.getById(driverRequest);
-
-
-            GetVehicleByIdRequest vehicleRequest = GetVehicleByIdRequest.builder()
-                    .id(assignment.getVehicleId())
-                    .build();
-            GetVehicleByIdResponse vehicleResponse = vehicleService.getById(vehicleRequest);
 
             GetAllAssignmentsWithDriverNameAndVehicleBrandResponse assignmentResponse = new
                     GetAllAssignmentsWithDriverNameAndVehicleBrandResponse();
 
             assignmentResponse.setId(assignment.getId());
-            assignmentResponse.setName(driverResponse.getName());
-            assignmentResponse.setBrand(vehicleResponse.getBrand());
+            assignmentResponse.setName(assignment.getDriver().getName());
+            assignmentResponse.setBrand(assignment.getVehicle().getBrand());
             assignmentResponse.setAssignedDate(assignment.getAssignedDate());
             assignmentResponse.setReturnDate(assignment.getReturnDate());
 

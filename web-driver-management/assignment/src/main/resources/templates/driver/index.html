@@ -1,4 +1,4 @@
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::body})}">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -38,8 +38,7 @@
                     data-driver-id=${driver.id}">Delete</button>
             <button class="btn btn-primary assign-driver"
                     th:attr="data-driver-name=${driver.name},
-                    data-driver-id=${driver.id},
-                    data-vehicle-list=' + ${#jsonArrays.toListJson(vehicles)} + '">Assign</button>
+                    data-driver-id=${driver.id}">Assign</button>
         </td>
     </tr>
     </tbody>
@@ -62,9 +61,9 @@
             cancelButtonText: 'Close',
             showLoaderOnConfirm: true,
             preConfirm: () => {
-                const name = Swal.getPopup().querySelector('#name').value;
-                const address = Swal.getPopup().querySelector('#address').value;
-                const phone = Swal.getPopup().querySelector('#phone').value;
+                const name = $('#name').val();
+                const address = $('#address').val();
+                const phone = $('#phone').val();
 
                 $.ajax({
                     url: '/drivers/add',
@@ -127,9 +126,9 @@
             cancelButtonText: 'Close',
             showLoaderOnConfirm: true,
             preConfirm: function() {
-                const name = Swal.getPopup().querySelector('#name').value;
-                const address = Swal.getPopup().querySelector('#address').value;
-                const phone = Swal.getPopup().querySelector('#phone').value;
+                const name = $('#name').val();
+                const address = $('#address').val();
+                const phone = $('#phone').val();
                 $.ajax({
                     url: '/drivers/update',
                     method: 'PUT',
@@ -180,9 +179,9 @@
             cancelButtonText: 'Close',
             showLoaderOnConfirm: true,
             preConfirm: function() {
-                const vehicleId = Swal.getPopup().querySelector('#vehicle').value;
-                const assignDate = Swal.getPopup().querySelector('#date').value;
-                const days = parseInt(Swal.getPopup().querySelector('#day').value);
+                const vehicleId = $('#vehicle').val();
+                const assignDate = $('#date').val();
+                const days = parseInt($('#day').val());
 
 
                 const assignedDateObj = new Date(assignDate);
@@ -202,7 +201,7 @@
                     contentType: "application/json",
                     data: JSON.stringify(data),
                     success: function(response) {
-                        location.reload();
+                        window.location.href = '/assignments/';
                     },
                 });
             },

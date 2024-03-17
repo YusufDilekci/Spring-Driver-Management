@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::body})}">
 <head>
     <meta charset="UTF-8">
     <title>Assignments</title>
@@ -24,8 +24,12 @@
         <td th:text="${#dates.format(assignment.assignedDate, 'dd/MM/yyyy')}"></td>
         <td th:text="${#dates.format(assignment.returnDate, 'dd/MM/yyyy')}"></td>
         <td>
-            <button class="btn btn-warning update-assignment" th:attr="data-assignment-id=${assignment.id}">Update</button>
-            <button class="btn btn-danger delete-assignment" th:attr="data-assignment-id=${assignment.id}">Delete</button>
+            <button class="btn btn-warning update-assignment"
+                    th:attr="data-assignment-id=${assignment.id}">Update</button>
+            <button class="btn btn-danger delete-assignment"
+                    th:attr="data-assignment-id=${assignment.id},
+                    data-assignment-name=${assignment.name},
+                    data-assignment-brand=${assignment.brand}">Delete</button>
         </td>
     </tr>
     </tbody>
@@ -35,39 +39,103 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script th:inline="javascript">
-    $(document).ready(function() {
-        $('.update-assignment').click(function() {
-            var assignmentId = $(this).data('assignment-id');
-            // Implement your update logic here
-        });
 
-        $('.delete-assignment').click(function() {
-            var assignmentId = $(this).data('assignment-id');
-            Swal.fire({
-                title: 'Delete Assignment',
-                text: 'Are you sure you want to delete this assignment?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Delete',
-                cancelButtonText: 'Cancel',
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                reverseButtons: true,
-                preConfirm: function() {
-                    $.ajax({
-                        url: '/assignments/delete/' + assignmentId,
-                        method: 'DELETE',
-                        success: function(response) {
-                            // Reload the page or update the assignment list as needed
-                        },
-                        error: function(xhr, status, error) {
-                            // Handle error
-                        }
-                    });
-                }
-            });
+    var driverList = /*[[ ${drivers} ]]*/ [];
+    var vehicleList = /*[[ ${vehicles} ]]*/ [];
+
+    $('.update-assignment').click(function() {
+        var id = $(this).data('assignment-id');
+
+        var optionsVehicles = '';
+
+        for (var i = 0; i < vehicleList.length; i++) {
+            optionsVehicles += '<option value="' + vehicleList[i].id + '">' + vehicleList[i].brand + '</option>';
+        }
+
+        var optionsDrivers = '';
+
+        for (var i = 0; i < driverList.length; i++) {
+            optionsDrivers += '<option value="' + driverList[i].id + '">' + driverList[i].name + '</option>';
+        }
+
+        Swal.fire({
+            title: 'Update Assignment',
+            html:
+                '<div class="input-group mb-3">\n' +
+                '  <label class="input-group-text" for="driver">Drivers</label>\n' +
+                '  <select class="form-select" id="driver">' +
+                '    <option selected>Choose...</option>' + optionsDrivers +
+                '  </select>\n' +
+                '</div>'+
+                '<div class="input-group mb-3">\n' +
+                '  <label class="input-group-text" for="vehicle">Vehicles</label>\n' +
+                '  <select class="form-select" id="vehicle">' +
+                '    <option selected>Choose...</option>' + optionsVehicles +
+                '  </select>\n' +
+                '</div>'+
+                '<div class="input-group mb-3">\n' +
+                '  <label class="input-group-text" for="inputGroupSelect01">Assigned Date</label>\n' +
+                '  <input id="assignedDate" type="date" class="form-control"/>' +
+                '  </select>\n' +
+                '</div>' +
+                '<div class="input-group mb-3">\n' +
+                '  <label class="input-group-text" for="inputGroupSelect01">Return Date</label>\n' +
+                '  <input id="returnDate" type="date" class="form-control"/>' +
+                '  </select>\n' +
+                '</div>' ,
+            showCancelButton: true,
+            confirmButtonText: 'Save',
+            cancelButtonText: 'Close',
+            showLoaderOnConfirm: true,
+            preConfirm: function() {
+                const vehicleId = $('#vehicle').val();
+                const driverId = $('#driver').val();
+                const assignedDate = $('#assignedDate').val();
+                const returnDate = $('#returnDate').val();
+                $.ajax({
+                    url: '/assignments/update',
+                    method: 'PUT',
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify({ id, vehicleId, driverId, assignedDate, returnDate}),
+                    success: function(response) {
+                        location.reload();
+                    },
+                });
+            },
+
         });
     });
+
+    $('.delete-assignment').click(function() {
+        var assignmentId = $(this).data('assignment-id');
+        var driverName = $(this).data('assignment-name');
+        var vehicleBrand = $(this).data('assignment-brand');
+
+        Swal.fire({
+            title: 'Delete Assignment',
+            html:
+                '<input class="form-control" type="text" value="' + driverName + '" disabled><br>' +
+                '<input class="form-control" type="text" value="' + vehicleBrand + '" disabled>',
+            showCancelButton: true,
+            confirmButtonText: 'Delete',
+            cancelButtonText: 'Close',
+            showLoaderOnConfirm: true,
+            preConfirm: function() {
+                $.ajax({
+                    url: '/assignments/delete',
+                    method: 'DELETE',
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify({ id: assignmentId }),
+                    success: function(response) {
+                        location.reload();
+                    },
+                });
+            }
+        });
+    });
+
 </script>
 </body>
 </html>

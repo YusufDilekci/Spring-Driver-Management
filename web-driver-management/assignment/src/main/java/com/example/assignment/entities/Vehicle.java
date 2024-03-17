@@ -3,6 +3,8 @@ package com.example.assignment.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @Builder
@@ -26,4 +28,7 @@ public class Vehicle {
 
     @Column(name = "type")
     private String type;
+
+    @OneToMany(mappedBy = "vehicle", cascade = CascadeType.REMOVE)
+    private Set<Assignment> assignments;
 }
