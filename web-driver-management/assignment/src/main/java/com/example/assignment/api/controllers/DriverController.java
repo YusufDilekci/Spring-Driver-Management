@@ -33,6 +33,15 @@ public class DriverController {
         return "driver/index.html";
     }
 
+//    @GetMapping("/")
+//    public String getAllWithVehicles(Model model) {
+//        var driversWithVehicles = driverService.getAllWithVehicles();
+//        model.addAttribute("driversWithVehicles", driversWithVehicles);
+//
+//        return "driver/index.html";
+//    }
+
+
     @PostMapping("/add")
 
     public ResponseEntity<?> add(@RequestBody CreateDriverRequest request) {
