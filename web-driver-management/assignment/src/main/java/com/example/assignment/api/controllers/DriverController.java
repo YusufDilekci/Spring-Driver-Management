@@ -21,26 +21,6 @@ import java.util.Map;
 @AllArgsConstructor
 public class DriverController {
     private DriverService driverService;
-    private VehicleService vehicleService;
-
-
-    @GetMapping("/")
-    public String getAll(Model model) {
-        var drivers = driverService.getAll();
-        var vehicles = vehicleService.getAll();
-        model.addAttribute("drivers", drivers);
-        model.addAttribute("vehicles", vehicles);
-        return "driver/index.html";
-    }
-
-//    @GetMapping("/")
-//    public String getAllWithVehicles(Model model) {
-//        var driversWithVehicles = driverService.getAllWithVehicles();
-//        model.addAttribute("driversWithVehicles", driversWithVehicles);
-//
-//        return "driver/index.html";
-//    }
-
 
     @PostMapping("/add")
 

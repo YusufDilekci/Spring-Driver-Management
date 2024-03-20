@@ -14,20 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class VehicleController {
     private VehicleService vehicleService;
-    private DriverService driverService;
-    @GetMapping("/")
-    public String getAll(Model model) {
-        var vehicles = vehicleService.getAll();
-        var drivers = driverService.getAll();
-        model.addAttribute("vehicles", vehicles);
-        model.addAttribute("drivers", drivers);
-        return "vehicle/index.html";
-    }
-
-    @GetMapping("/getall")
-    public ResponseEntity<?> getAll() {
-        return ResponseEntity.ok(vehicleService.getAll());
-    }
 
     @PostMapping("/add")
 
