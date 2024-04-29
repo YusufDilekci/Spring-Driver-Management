@@ -5,15 +5,36 @@
     <title>Title</title>
 </head>
 <body>
-    <nav th:fragment="navbar" class="navbar navbar-expand navbar-dark bg-dark" aria-label="Second navbar example">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Always expand</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+<!--    <nav th:fragment="navbar" class="navbar navbar-expand navbar-dark bg-dark" aria-label="Second navbar example">-->
+<!--        <div class="container-fluid">-->
+<!--            <a class="navbar-brand" href="#">Always expand</a>-->
+<!--            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false" aria-label="Toggle navigation">-->
+<!--                <span class="navbar-toggler-icon"></span>-->
+<!--            </button>-->
 
-            <div class="collapse navbar-collapse" id="navbarsExample02">
-                <ul class="navbar-nav me-auto">
+<!--            <div class="collapse navbar-collapse" id="navbarsExample02">-->
+<!--                <ul class="navbar-nav me-auto">-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link active" aria-current="page" href="/">Home</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="/drivers">Drivers</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="/vehicles">Vehicles</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="/assignments">Assignments</a>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </nav>-->
+    <header th:fragment="navbar" class="p-3 text-bg-dark">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/">Home</a>
                     </li>
@@ -27,13 +48,14 @@
                         <a class="nav-link" href="/assignments">Assignments</a>
                     </li>
                 </ul>
-                <form role="search">
-                    <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-                </form>
+
+                <div class="text-end">
+                    <a href="/login"><button type="button" class="btn btn-outline-light me-2">Login</button></a>
+                    <a href="/register" ><button type="button" class="btn btn-warning">Sign-up</button></a>
+                </div>
             </div>
         </div>
-    </nav>
-
+    </header>
 
 </body>
 </html>

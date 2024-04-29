@@ -31,7 +31,6 @@
                     data-assignment-name=${assignment.name},
                     data-assignment-brand=${assignment.brand}">Delete</button>
 
-            <button class="btn btn-primary add-assignment">Assign</button>
         </td>
     </tr>
     </tbody>
@@ -44,71 +43,6 @@
 
     var driverList = /*[[ ${drivers} ]]*/ [];
     var vehicleList = /*[[ ${vehicles} ]]*/ [];
-
-    $('.add-assignment').click(function() {
-
-        var optionsVehicles = '';
-
-        for (var i = 0; i < vehicleList.length; i++) {
-            optionsVehicles += '<option value="' + vehicleList[i].id + '">' + vehicleList[i].brand + '</option>';
-        }
-
-        var optionsDrivers = '';
-
-        for (var i = 0; i < driverList.length; i++) {
-            optionsDrivers += '<option value="' + driverList[i].id + '">' + driverList[i].name + '</option>';
-        }
-
-        Swal.fire({
-            title: 'Add Assignment',
-            html:
-                '<div class="input-group mb-3">\n' +
-                '  <label class="input-group-text" for="driver">Drivers</label>\n' +
-                '  <select class="form-select" id="driver">' +
-                '    <option selected>Choose...</option>' + optionsDrivers +
-                '  </select>\n' +
-                '</div>'+
-                '<div class="input-group mb-3">\n' +
-                '  <label class="input-group-text" for="vehicle">Vehicles</label>\n' +
-                '  <select class="form-select" id="vehicle">' +
-                '    <option selected>Choose...</option>' + optionsVehicles +
-                '  </select>\n' +
-                '</div>'+
-                '<div class="input-group mb-3">\n' +
-                '  <label class="input-group-text" for="inputGroupSelect01">Assigned Date</label>\n' +
-                '  <input id="assignedDate" type="date" class="form-control"/>' +
-                '  </select>\n' +
-                '</div>' +
-                '<div class="input-group mb-3">\n' +
-                '  <label class="input-group-text" for="inputGroupSelect01">Return Date</label>\n' +
-                '  <input id="returnDate" type="date" class="form-control"/>' +
-                '  </select>\n' +
-                '</div>',
-            showCancelButton: true,
-            confirmButtonText: 'Save',
-            cancelButtonText: 'Close',
-            showLoaderOnConfirm: true,
-            preConfirm: function() {
-                const vehicleId = $('#vehicle').val();
-                const driverId = $('#driver').val();
-                const assignedDate = $('#assignedDate').val();
-                const returnDate = $('#returnDate').val();
-                $.ajax({
-                    url: '/assignments/add',
-                    method: 'POST',
-                    dataType: "json",
-                    contentType: "application/json",
-                    data: JSON.stringify({vehicleId, driverId, assignedDate, returnDate}),
-                    success: function(response) {
-                        location.reload();
-                    },
-                });
-            },
-
-        });
-    });
-
-
 
     $('.update-assignment').click(function() {
         var id = $(this).data('assignment-id');
