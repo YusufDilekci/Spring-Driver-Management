@@ -17,5 +17,7 @@ public class GetAllUsersResponse {
 	private String firstname;
 	private String lastname;
 	private String email;
+	private String phone;
+	private String imgUrl;
 	private Set<Role> roles;
 }

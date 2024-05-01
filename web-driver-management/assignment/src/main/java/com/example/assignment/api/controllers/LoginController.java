@@ -3,16 +3,13 @@ package com.example.assignment.api.controllers;
 import com.example.assignment.business.abstracts.AuthService;
 import com.example.assignment.business.dtos.requests.LoginRequest;
 import com.example.assignment.business.dtos.responses.LoginResponse;
-import com.example.assignment.business.dtos.responses.RegisterResponse;
 import com.example.assignment.core.utilities.mappers.ModelMapperService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @AllArgsConstructor

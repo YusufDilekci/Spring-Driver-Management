@@ -82,6 +82,7 @@ public class UserManager implements UserService {
 		user.setFirstname(request.getFirstname());
 		user.setLastname(request.getLastname());
 		user.setEmail(request.getEmail());
+		user.setPhone(request.getPhone());
 		user.setPassword(passwordEncoder.encode(request.getPassword()));
 		
 		User newUser = userRepository.save(user);
@@ -110,6 +111,7 @@ public class UserManager implements UserService {
 		user.setEmail(request.getEmail());
 		user.setFirstname(request.getFirstname());
 		user.setLastname(request.getLastname());
+		user.setPhone(request.getPhone());
 		user.setPassword(passwordEncoder.encode(request.getPassword()));
 		user.setRoles(toSetRole(request.getRoles()));
 		

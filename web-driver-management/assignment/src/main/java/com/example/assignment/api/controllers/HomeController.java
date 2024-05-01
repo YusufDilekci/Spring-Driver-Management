@@ -2,6 +2,7 @@ package com.example.assignment.api.controllers;
 
 import com.example.assignment.business.abstracts.AssignmentService;
 import com.example.assignment.business.abstracts.DriverService;
+import com.example.assignment.business.abstracts.UserService;
 import com.example.assignment.business.abstracts.VehicleService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ public class HomeController {
     private AssignmentService assignmentService;
     private DriverService driverService;
     private VehicleService vehicleService;
+    private UserService userService;
     @GetMapping("/")
     public String index() {
         return "home/index.html";
@@ -50,5 +52,12 @@ public class HomeController {
         model.addAttribute("vehicles", vehicles);
 
         return "home/assignments.html";
+    }
+
+    @GetMapping("/users")
+    public String users(Model model) {
+        var users = userService.getAll();
+        model.addAttribute("users", users);
+        return "home/users.html";
     }
 }
