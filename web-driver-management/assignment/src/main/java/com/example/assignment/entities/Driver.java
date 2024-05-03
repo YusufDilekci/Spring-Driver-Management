@@ -26,6 +26,9 @@ public class Driver {
     @Column(name = "phone")
     private String phone;
 
+    @Column(name = "img_url")
+    private String imgUrl;
+
     @OneToMany(mappedBy = "driver", cascade = CascadeType.REMOVE)
     private Set<Assignment> assignments;
 }

@@ -14,9 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetAllUsersResponse {
 	private int id;
-	private String firstname;
-	private String lastname;
-	private String email;
+	private String username;
 	private String phone;
 	private String imgUrl;
 	private Set<Role> roles;

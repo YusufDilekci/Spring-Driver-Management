@@ -2,10 +2,7 @@ package com.example.assignment.api.controllers;
 
 import com.example.assignment.business.abstracts.DriverService;
 import com.example.assignment.business.abstracts.VehicleService;
-import com.example.assignment.business.dtos.requests.CreateAssignmentRequest;
-import com.example.assignment.business.dtos.requests.CreateDriverRequest;
-import com.example.assignment.business.dtos.requests.DeleteDriverRequest;
-import com.example.assignment.business.dtos.requests.UpdateDriverRequest;
+import com.example.assignment.business.dtos.requests.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 
+import java.io.IOException;
 import java.util.Map;
 
 @Controller
@@ -41,6 +39,13 @@ public class DriverController {
 
     public ResponseEntity<?> delete(@RequestBody UpdateDriverRequest request) {
         return ResponseEntity.ok(driverService.update(request));
+
+    }
+
+    @PutMapping("/upload-image")
+
+    public ResponseEntity<?> uploadImage(UploadDriverImageRequest request) throws IOException {
+        return ResponseEntity.ok(driverService.uploadImage(request));
 
     }
 

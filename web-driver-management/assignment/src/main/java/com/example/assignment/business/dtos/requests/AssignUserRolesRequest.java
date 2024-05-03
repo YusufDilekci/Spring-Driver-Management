@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AssignUserRolesRequest {
-	private String email;
+	private String username;
 	private String[] roles;
 }

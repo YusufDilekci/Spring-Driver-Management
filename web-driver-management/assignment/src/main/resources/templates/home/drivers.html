@@ -9,12 +9,13 @@
 <table class="table">
     <thead>
     <tr>
-        <td colspan="4">
+        <td colspan="5">
             <button class="btn btn-primary add-driver" style="width: 100%">Add</button>
         </td>
 
     </tr>
     <tr>
+        <th>Picture</th>
         <th>Name</th>
         <th>Address</th>
         <th>Phone</th>
@@ -23,6 +24,7 @@
     </thead>
     <tbody>
     <tr th:each="driver: ${drivers}">
+        <td><img th:src="${'/images/' + driver.imgUrl}" alt="" width="150" height="150"/></td>
         <td th:text="${driver.name}"></td>
         <td th:text="${driver.address}"></td>
         <td th:text="${driver.phone}"></td>
@@ -39,6 +41,8 @@
             <button class="btn btn-primary assign-driver"
                     th:attr="data-driver-name=${driver.name},
                     data-driver-id=${driver.id}">Assign</button>
+            <button class="btn btn-success upload-driver-img"
+                    th:attr="data-driver-id=${driver.id}">Upload Image</button>
         </td>
     </tr>
     </tbody>
@@ -202,6 +206,41 @@
                     data: JSON.stringify(data),
                     success: function(response) {
                         window.location.href = '/assignments';
+                    },
+                });
+            },
+
+        });
+    });
+
+    $('.upload-driver-img').click(function() {
+        var id = $(this).data('driver-id');
+
+        Swal.fire({
+            title: 'Upload Driver Image',
+            html:
+                '<div class="input-group">\n' +
+                '  <input id="img" type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">\n' +
+                '</div>',
+            showCancelButton: true,
+            confirmButtonText: 'Save',
+            cancelButtonText: 'Close',
+            showLoaderOnConfirm: true,
+            preConfirm: function() {
+                var formData = new FormData();
+                const img = $('#img')[0].files[0];
+                formData.append('img', img);
+                formData.append('id', id);
+
+                $.ajax({
+                    url: '/drivers/upload-image',
+                    method: 'PUT',
+                    dataType: "json",
+                    processData: false,
+                    contentType: false,
+                    data:formData,
+                    success: function(response) {
+                        location.reload();
                     },
                 });
             },

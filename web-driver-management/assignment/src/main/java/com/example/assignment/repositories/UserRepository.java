@@ -10,11 +10,13 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-    Optional<User> findByEmail(String email);
+    Optional<User> findByUsername(String username);
 
     @Modifying
     @Query(
             value = "UPDATE users SET deleted = true where id = :userId",
             nativeQuery = true)
     void softdeleteById(@Param("userId") int userId);
+
+
 }

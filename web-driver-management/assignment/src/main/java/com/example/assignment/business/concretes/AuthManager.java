@@ -3,6 +3,7 @@ package com.example.assignment.business.concretes;
 import com.example.assignment.business.abstracts.AuthService;
 import com.example.assignment.business.dtos.requests.LoginRequest;
 import com.example.assignment.business.dtos.requests.RegisterRequest;
+
 import com.example.assignment.business.dtos.responses.LoginResponse;
 import com.example.assignment.business.dtos.responses.RegisterResponse;
 import com.example.assignment.core.entities.User;
@@ -34,10 +35,9 @@ public class AuthManager implements AuthService {
         var role = roleRepository.findByName("USER").orElseThrow();
 
         var user = User.builder()
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
-                .email(request.getEmail())
+                .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .phone(request.getPhone())
                 .roles(Set.of(role))
                 .deleted(false)
                 .build();
@@ -54,17 +54,16 @@ public class AuthManager implements AuthService {
     public LoginResponse login(LoginRequest request) {
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
+                        request.getUsername(),
                         request.getPassword()
                 )
         );
 
-        var user = userRepository.findByEmail(request.getEmail())
+        var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         return LoginResponse.builder()
                 .token(jwtToken)
-                .auth(auth)
                 .build();
 
     }

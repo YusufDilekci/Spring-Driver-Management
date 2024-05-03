@@ -40,18 +40,10 @@ public class UserManager implements UserService {
 		
 		return response;
 	}
-	
-	public GetUserByMailResponse getByEmail(GetUserByMailRequest request) {
-		
-		var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
 
-		GetUserByMailResponse response = this.modelMapperService.forResponse().map(user, GetUserByMailResponse.class);
-		
-		return response;
-	}
 	
 	public AssignedUserRolesResponse assignRoles(AssignUserRolesRequest request) {
-		var user = userRepository.findByEmail(request.getEmail()).get();
+		var user = userRepository.findByUsername(request.getUsername()).orElseThrow();
 		
 		var roles = toSetRole(request.getRoles());
 
@@ -67,7 +59,7 @@ public class UserManager implements UserService {
 		userRepository.save(user);
 
 		AssignedUserRolesResponse response = new AssignedUserRolesResponse();
-		response.setEmail(user.getEmail());
+		response.setEmail(user.getUsername());
 		response.setRoles(assignedRoles);
 
 		return response;
@@ -79,9 +71,7 @@ public class UserManager implements UserService {
 		User user  = new User();
 		
 		user.setRoles(toSetRole(request.getRoles()));
-		user.setFirstname(request.getFirstname());
-		user.setLastname(request.getLastname());
-		user.setEmail(request.getEmail());
+		user.setUsername(request.getUsername());
 		user.setPhone(request.getPhone());
 		user.setPassword(passwordEncoder.encode(request.getPassword()));
 		
@@ -107,10 +97,8 @@ public class UserManager implements UserService {
 	public UpdatedUserResponse update(UpdateUserRequest request) {
 
 		User user = userRepository.findById(request.getId()).orElseThrow();
-		
-		user.setEmail(request.getEmail());
-		user.setFirstname(request.getFirstname());
-		user.setLastname(request.getLastname());
+
+		user.setUsername(request.getUsername());
 		user.setPhone(request.getPhone());
 		user.setPassword(passwordEncoder.encode(request.getPassword()));
 		user.setRoles(toSetRole(request.getRoles()));

@@ -40,14 +40,10 @@ public class User implements UserDetails{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	
 	private int id;
-	
-	private String firstname;
-	
-	private String lastname;
 
 	private String phone;
 
-	private String email;
+	private String username;
 	
 	private String password;
 
@@ -55,10 +51,7 @@ public class User implements UserDetails{
 	
 	@Builder.Default
 	private boolean deleted = Boolean.FALSE;
-	
-	
-	//cascade = CascadeType.ALL //HATA ALIRSAN BAK!!!!
-	
+
 	@ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "users_roles",
@@ -81,7 +74,7 @@ public class User implements UserDetails{
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return email;
+		return username;
 	}
 
 	@Override
@@ -117,6 +110,10 @@ public class User implements UserDetails{
 	public void addRole(Role role) {
         this.roles.add(role);
     }
-	
+
+	public Set<Role> getRoles(){
+		return roles;
+	}
+
 
 }

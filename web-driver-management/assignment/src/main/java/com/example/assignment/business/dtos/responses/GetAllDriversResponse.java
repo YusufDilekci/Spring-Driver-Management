@@ -17,4 +17,7 @@ public class GetAllDriversResponse {
     private String address;
 
     private String phone;
+
+    private String imgUrl;
+
 }

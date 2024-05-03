@@ -7,11 +7,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class GetUserByMailResponse {
-	
-	private String firstname;
-	private String lastname;
-	private String email;
+@NoArgsConstructor
+public class UploadedDriverImageResponse {
+    private String name;
+    private String imgUrl;
 }

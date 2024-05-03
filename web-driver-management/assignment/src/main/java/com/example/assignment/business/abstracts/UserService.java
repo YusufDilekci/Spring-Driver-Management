@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface UserService {
 	List<GetAllUsersResponse> getAll();
-	GetUserByMailResponse getByEmail(GetUserByMailRequest request);
 	AssignedUserRolesResponse assignRoles(AssignUserRolesRequest request);
 	CreatedUserResponse add(CreateUserRequest request);
 	UpdatedUserResponse update(UpdateUserRequest request);

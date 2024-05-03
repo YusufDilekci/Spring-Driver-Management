@@ -4,12 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class GetUserByMailRequest {
-	
-	private String email;
+@NoArgsConstructor
+public class UploadDriverImageRequest {
+    private int id;
+    private MultipartFile img;
 }
