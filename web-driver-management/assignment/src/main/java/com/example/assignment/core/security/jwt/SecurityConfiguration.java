@@ -22,6 +22,7 @@ public class SecurityConfiguration {
 	
 	private final JwtAuthenticationFilter jwtAuthFilter;
 	private final AuthenticationProvider authenticationProvider;
+	private final CookieJwtAuthFilter cookieJwtAuthFilter;
 	@Bean
 	public SecurityFilterChain apisecurityFilterChain(HttpSecurity http) throws Exception{
 		http
@@ -38,12 +39,13 @@ public class SecurityConfiguration {
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
-				.formLogin()
-				.defaultSuccessUrl("/")
-				.permitAll()
-				.and()
+				.logout((logout) -> logout.deleteCookies("token"))
+//				.formLogin()
+//				.loginProcessingUrl("/login")
+//				.defaultSuccessUrl("/")
+//				.and()
 			.authenticationProvider(authenticationProvider)
-			.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+			.addFilterBefore(cookieJwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 		
 		return http.build();
 	}

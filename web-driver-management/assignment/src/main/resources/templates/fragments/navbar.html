@@ -33,7 +33,7 @@
                 </div>
                 <div sec:authorize="isAuthenticated()">
                     <div class="text-end">
-                        <p th:text="${#authentication.getName()}"></p>
+                        <p class="me-2" th:text="${#authentication.getName()}"></p>
                         <a href="/logout" ><button type="button" class="btn btn-warning">Logout</button></a>
                     </div>
                 </div>
