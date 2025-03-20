@@ -1,0 +1,130 @@
+## Local bashten ec2 örneğine(sanal makina) sına bağlanmak
+ssh -i "jossoft.pem" ubuntu@ec2-16-171-112-187.eu-north-1.compute.amazonaws.com
+sudo ssh -i "jossoft_key.pem" azureuser@20.215.42.194
+
+## Güncelleme
+sudo apt update && sudo apt upgrade -y 
+
+# Ubuntu için Java Maven Kurulumu
+sudo apt install openjdk-17-jdk -y
+sudo apt install maven -y
+
+# MySQL Kurulumu
+sudo apt install mysql-server -y
+sudo systemctl start mysql
+sudo systemctl enable mysql
+
+# Nginx Kurulumusudo systemctl start mysql
+
+sudo apt install nginx -y
+sudo systemctl start nginx
+sudo systemctl enable nginx
+
+## Uygulama için sanal makinedeki MySQL örneğinde veritabanı tablolar oluşturma
+sudo mysql -u root -p
+
+##  Eksik İzinleri Ekleyin:Eğer root kullanıcısı sadece localhost için tanımlıysa, tüm IP'lerden erişime izin vermek için aşağıdaki komutu çalıştırın
+CREATE USER 'root'@'%' IDENTIFIED BY '1234';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+CREATE DATABASE swe304;
+USE swe304;
+CREATE TABLE person (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(16),
+    address VARCHAR(32)
+);
+
+NOTE// Şifre Doğrulaması: MySQL 8.0 ve sonrasında varsayılan kimlik doğrulama yöntemi caching_sha2_password olarak ayarlanmıştır. 
+Eğer eski bir MySQL istemcisi kullanıyorsanız, bu hatayı alabilirsiniz. 
+Bu durumda, kimlik doğrulama yöntemini değiştirebilirsiniz:
+
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'your-password';
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'your-password';
+FLUSH PRIVILEGES;
+
+## Jar dosyasını localden sanal makinaya kopyalamak
+scp -i "jossoft.pem" /c/Users/ydile/Desktop/DevOps/Project/devOpsPersonInfo/target/devOpsPersonInfo-0.0.1-SNAPSHOT.jar 
+ubuntu@ec2-13-60-70-228.eu-north-1.compute.amazonaws.com:/home/ubuntu/
+
+scp -i "jossoft_key.pem" /c/Users/ydile/Desktop/DevOps/Project/devOpsPersonInfo/docker-compose.yml 
+azureuser@20.215.42.194:/home/azureuser/
+
+
+## Jar dosyasını çalıştırma
+java -jar your-app.jar
+
+
+## Nginx Yapılandırılması: Nginx'i, uygulamanızın çalıştığı portu (örneğin, 8080) dinleyecek şekilde yapılandırın
+sudo nano /etc/nginx/nginx.conf
+
+http{
+
+server {
+    listen 80;
+    server_name 13.60.70.228;
+
+    location / {
+        proxy_pass http://localhost:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+}
+
+sudo systemctl restart nginx
+
+## Web Uygulamasına Erişim
+
+http://13.60.70.228
+
+
+
+
+## Appi Systemd ile otomatik başlatma: systemd, Linux sistemlerinde servisleri yönetmek için kullanılan bir araçtır. 
+Uygulamanızı bir systemd servisi olarak tanımlayarak, EC2 örneği her başladığında otomatik olarak başlatabilirsiniz.
+
+sudo nano /etc/systemd/system/devops-person-info.service
+-------------------------------------------------
+[Unit]
+Description=DevOps Person Info Application
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/java -jar /home/ubuntu/devOpsPersonInfo-0.0.1-SNAPSHOT.jar
+User=ubuntu
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+--------------------------------
+sudo systemctl start devops-person-info
+sudo systemctl enable devops-person-info
+sudo systemctl status devops-person-info
+sudo systemctl restart devops-person-info
+
+
+
+### DOCKER
+
+sudo apt update
+sudo apt install docker.io -y
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo usermod -aG docker $USER  # Mevcut kullanıcıya Docker erişimi verin
+
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose --version  # Yeni sürümü kontrol edin
+
+docker login
+
+sudo docker-compose up
+
+
+
+
+
